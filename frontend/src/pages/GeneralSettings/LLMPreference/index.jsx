@@ -11,6 +11,7 @@ import AzureOpenAiLogo from "@/media/llmprovider/azure.png";
 import AnthropicLogo from "@/media/llmprovider/anthropic.png";
 import GeminiLogo from "@/media/llmprovider/gemini.png";
 import OllamaLogo from "@/media/llmprovider/ollama.png";
+import DockerModelRunnerLogo from "@/media/llmprovider/docker-model-runner.png";
 import NovitaLogo from "@/media/llmprovider/novita.png";
 import LMStudioLogo from "@/media/llmprovider/lmstudio.png";
 import LocalAiLogo from "@/media/llmprovider/localai.png";
@@ -44,6 +45,7 @@ import LMStudioOptions from "@/components/LLMSelection/LMStudioOptions";
 import LocalAiOptions from "@/components/LLMSelection/LocalAiOptions";
 import GeminiLLMOptions from "@/components/LLMSelection/GeminiLLMOptions";
 import OllamaLLMOptions from "@/components/LLMSelection/OllamaLLMOptions";
+import DockerModelRunnerLLMOptions from "@/components/LLMSelection/DockerModelRunnerLLMOptions";
 import NovitaLLMOptions from "@/components/LLMSelection/NovitaLLMOptions";
 import CometApiLLMOptions from "@/components/LLMSelection/CometApiLLMOptions";
 import TogetherAiOptions from "@/components/LLMSelection/TogetherAiOptions";
@@ -132,6 +134,14 @@ export const AVAILABLE_LLM_PROVIDERS = [
     options: (settings) => <OllamaLLMOptions settings={settings} />,
     description: "Run LLMs locally on your own machine.",
     requiredConfig: ["OllamaLLMBasePath"],
+  },
+  {
+    name: "Docker Model Runner",
+    value: "docker-model-runner",
+    logo: DockerModelRunnerLogo,
+    options: (settings) => <DockerModelRunnerLLMOptions settings={settings} />,
+    description: "Run LLMs in Docker containers with OpenAI-compatible API.",
+    requiredConfig: ["DockerModelRunnerLLMBasePath"],
   },
   {
     name: "Dell Pro AI Studio",

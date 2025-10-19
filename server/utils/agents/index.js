@@ -89,6 +89,12 @@ class AgentHandler {
         if (!process.env.OLLAMA_BASE_PATH)
           throw new Error("Ollama base path must be provided to use agents.");
         break;
+      case "docker-model-runner":
+        if (!process.env.DOCKER_MODEL_RUNNER_BASE_PATH)
+          throw new Error(
+            "Docker Model Runner base path must be provided to use agents."
+          );
+        break;
       case "groq":
         if (!process.env.GROQ_API_KEY)
           throw new Error("Groq API key must be provided to use agents.");
