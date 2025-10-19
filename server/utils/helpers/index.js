@@ -149,6 +149,9 @@ function getLLMProvider({ provider = null, model = null } = {}) {
     case "ollama":
       const { OllamaAILLM } = require("../AiProviders/ollama");
       return new OllamaAILLM(embedder, model);
+    case "docker-model-runner":
+      const { DockerModelRunnerLLM } = require("../AiProviders/dockerModelRunner");
+      return new DockerModelRunnerLLM(embedder, model);
     case "togetherai":
       const { TogetherAiLLM } = require("../AiProviders/togetherAi");
       return new TogetherAiLLM(embedder, model);
@@ -302,6 +305,9 @@ function getLLMProviderClass({ provider = null } = {}) {
     case "ollama":
       const { OllamaAILLM } = require("../AiProviders/ollama");
       return OllamaAILLM;
+    case "docker-model-runner":
+      const { DockerModelRunnerLLM } = require("../AiProviders/dockerModelRunner");
+      return DockerModelRunnerLLM;
     case "togetherai":
       const { TogetherAiLLM } = require("../AiProviders/togetherAi");
       return TogetherAiLLM;

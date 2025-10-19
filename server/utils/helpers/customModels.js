@@ -15,6 +15,7 @@ const SUPPORT_CUSTOM_MODELS = [
   "anthropic",
   "localai",
   "ollama",
+  "docker-model-runner",
   "togetherai",
   "fireworksai",
   "nvidia-nim",
@@ -52,6 +53,8 @@ async function getCustomModels(provider = "", apiKey = null, basePath = null) {
       return await localAIModels(basePath, apiKey);
     case "ollama":
       return await ollamaAIModels(basePath, apiKey);
+    case "docker-model-runner":
+      return await dockerModelRunnerModels(basePath, apiKey);
     case "togetherai":
       return await getTogetherAiModels(apiKey);
     case "fireworksai":
@@ -380,6 +383,50 @@ async function ollamaAIModels(basePath = null, _authToken = null) {
   if (models.length > 0 && !!authToken)
     process.env.OLLAMA_AUTH_TOKEN = authToken;
   return { models, error: null };
+}
+
+async function dockerModelRunnerModels(basePath = null, _authToken = null) {
+  try {
+    const { OpenAI: OpenAIApi } = require("openai");
+    let urlPath = basePath ?? process.env.DOCKER_MODEL_RUNNER_BASE_PATH;
+    new URL(urlPath);
+    if (urlPath.split("").slice(-1)?.[0] === "/")
+      throw new Error("BasePath Cannot end in /!");
+
+    const authToken = _authToken || process.env.DOCKER_MODEL_RUNNER_AUTH_TOKEN || null;
+    const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+
+    const openai = new OpenAIApi({
+      baseURL: urlPath,
+      apiKey: authToken || "docker-model-runner",
+      defaultHeaders: headers,
+    });
+
+    const models = await openai.models
+      .list()
+      .then((results) => results.data)
+      .then((models) =>
+        models.map((model) => {
+          return {
+            id: model.id,
+            name: model.id,
+            organization: model.owned_by || "Docker Model Runner",
+          };
+        })
+      )
+      .catch((e) => {
+        console.error(`DockerModelRunner:listModels`, e.message);
+        return [];
+      });
+
+    // Auth Token was successful so lets save it for future uses
+    if (models.length > 0 && !!authToken)
+      process.env.DOCKER_MODEL_RUNNER_AUTH_TOKEN = authToken;
+    return { models, error: null };
+  } catch (error) {
+    console.error("DockerModelRunner:dockerModelRunnerModels", error);
+    return { models: [], error: "Not a valid URL or could not reach Docker Model Runner server." };
+  }
 }
 
 async function getTogetherAiModels(apiKey = null) {

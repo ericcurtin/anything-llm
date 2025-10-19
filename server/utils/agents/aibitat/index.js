@@ -786,6 +786,8 @@ ${this.getHistory({ to: route.to })
         return new Providers.LMStudioProvider({ model: config.model });
       case "ollama":
         return new Providers.OllamaProvider({ model: config.model });
+      case "docker-model-runner":
+        return new Providers.DockerModelRunnerProvider({ model: config.model });
       case "groq":
         return new Providers.GroqProvider({ model: config.model });
       case "togetherai":
